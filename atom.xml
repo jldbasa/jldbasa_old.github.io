@@ -4,7 +4,7 @@
   <title><![CDATA[$ man jerome_]]></title>
   <link href="http://jldbasa.github.io/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2013-08-19T11:21:42-07:00</updated>
+  <updated>2013-08-19T12:08:46-07:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[Jerome Basa]]></name>
@@ -12,5 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[first post]]></title>
+    <link href="http://jldbasa.github.io/blog/2013/08/19/first-post/"/>
+    <updated>2013-08-19T11:29:00-07:00</updated>
+    <id>http://jldbasa.github.io/blog/2013/08/19/first-post</id>
+    <content type="html"><![CDATA[<p>hello world!</p>
+
+<p>trying out gh-pages, and i setup octopress. long story short; after you make
+a post, just generate and deploy your blog to Github via rake commands.</p>
+
+<p>your post and pages are written using markdown syntax. so far it&rsquo;s all good.</p>
+
+<p>if you use zsh, you might want to check this
+  <a href="http://ryanarneson.com/blog/2012/04/07/rake-new-post-doesnt-work-with-zsh/">link</a>.</p>
+]]></content>
+  </entry>
   
 </feed>
