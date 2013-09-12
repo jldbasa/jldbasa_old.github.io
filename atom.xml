@@ -4,7 +4,7 @@
   <title><![CDATA[$ man jerome_]]></title>
   <link href="http://jldbasa.github.io/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2013-08-19T13:08:16-07:00</updated>
+  <updated>2013-09-12T09:18:32-07:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -12,6 +12,153 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA['git... wtf is ____?']]></title>
+    <link href="http://jldbasa.github.io/blog/2013/09/12/git-dot-dot-dot-wtf-is/"/>
+    <updated>2013-09-12T08:51:00-07:00</updated>
+    <id>http://jldbasa.github.io/blog/2013/09/12/git-dot-dot-dot-wtf-is</id>
+    <content type="html"><![CDATA[<blockquote><p>some git notes i put together for reference</p></blockquote>
+
+<h2>Rollback changes</h2>
+
+<ul>
+<li>undo last commit, put changes to staging</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git reset --soft HEAD^
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>new message, change the last commit</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git commit --amend -m
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>undo last commit and all changes</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git reset --hard HEAD^
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>undo 2 commits and all changes</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git reset --hard HEAD^^
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Remotes</h2>
+
+<ul>
+<li>add new remotes</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote add &lt;name&gt; &lt;address&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>remove remotes</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote rm &lt;name&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>push to remotes</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git push -u &lt;name&gt; &lt;branch&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>remote show</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote show origin
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>clean-up deleted remote branches</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote prune origin
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Tagging</h2>
+
+<ul>
+<li>list all tags</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git tag
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>checkout code commit</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git checkout v0.0.1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>add new tag</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git tag -a v0.0.3 -m <span class="s2">&quot;version 0.0.3&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>push new tags</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git push --tags
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[first post]]></title>
