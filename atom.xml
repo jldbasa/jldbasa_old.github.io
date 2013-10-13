@@ -4,7 +4,7 @@
   <title><![CDATA[$ man jerome_]]></title>
   <link href="http://jldbasa.github.io/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2013-10-10T10:58:10-07:00</updated>
+  <updated>2013-10-13T07:15:38-07:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[favorite gems]]></title>
+    <link href="http://jldbasa.github.io/blog/2013/10/13/favorite-gems/"/>
+    <updated>2013-10-13T07:00:00-07:00</updated>
+    <id>http://jldbasa.github.io/blog/2013/10/13/favorite-gems</id>
+    <content type="html"><![CDATA[<p>am compiling a list of gems that i use or will use in the future. this post
+will be regulary updated.</p>
+
+<p><em>note:</em> the following gems works with rails 4.0</p>
+
+<ul>
+<li>authentication
+
+<ul>
+<li><a href="" title="https://github.com/plataformatec/devise">devise</a></li>
+<li><a href="" title="https://github.com/intridea/omniauth">omniauth</a></li>
+</ul>
+</li>
+<li>authorization &ndash; <a href="" title="https://github.com/nathanl/authority">authority</a></li>
+<li>configuration &ndash; <a href="" title="https://github.com/laserlemon/figaro">figaro</a></li>
+<li>elastic search &ndash; <a href="" title="https://github.com/karmi/retire">tire</a></li>
+<li>facebook graph &ndash; <a href="" title="https://github.com/arsduo/koala">koala</a></li>
+<li>paginator &ndash; <a href="" title="https://github.com/amatsuda/kaminari">kaminari</a></li>
+</ul>
+
+
+<p>hit the comments if you want something added</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[creating rails app from scratch]]></title>
