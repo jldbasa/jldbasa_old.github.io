@@ -19,5 +19,7 @@ will be regulary updated.
 * elastic search - [tire]('https://github.com/karmi/retire')
 * facebook graph - [koala]('https://github.com/arsduo/koala')
 * paginator - [kaminari]('https://github.com/amatsuda/kaminari')
+* uploader
+  - [carrierwave]('https://github.com/carrierwaveuploader/carrierwave')
 
 hit the comments if you want something added
