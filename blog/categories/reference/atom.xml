@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Reference | $ man jerome_]]></title>
   <link href="http://jldbasa.github.io/blog/categories/reference/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2013-10-13T07:15:38-07:00</updated>
+  <updated>2013-10-20T08:03:46-07:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -36,6 +36,12 @@ will be regulary updated.</p>
 <li>elastic search &ndash; <a href="" title="https://github.com/karmi/retire">tire</a></li>
 <li>facebook graph &ndash; <a href="" title="https://github.com/arsduo/koala">koala</a></li>
 <li>paginator &ndash; <a href="" title="https://github.com/amatsuda/kaminari">kaminari</a></li>
+<li>uploader
+
+<ul>
+<li><a href="" title="https://github.com/carrierwaveuploader/carrierwave">carrierwave</a></li>
+</ul>
+</li>
 </ul>
 
 
