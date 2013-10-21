@@ -396,10 +396,18 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mkdir appname
 </span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>appname
 </span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;source &#39;https://rubygems.org&#39;&quot;</span> &gt; Gemfile
 </span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;gem &#39;rails&#39;, &#39;~&gt; 4.0.0&#39;&quot;</span> &gt;&gt; Gemfile
+</span><span class='line'>
+</span><span class='line'><span class="c"># make sure that your ruby version is set before running the next commands. am</span>
+</span><span class='line'><span class="c"># using version 2.0.0.</span>
+</span><span class='line'>
 </span><span class='line'><span class="nv">$ </span>bundle install --path vendor
 </span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new . --skip-bundle
 </span><span class='line'><span class="nv">$ </span>bundle install --path vendor

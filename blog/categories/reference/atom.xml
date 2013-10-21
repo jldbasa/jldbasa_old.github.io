@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Reference | $ man jerome_]]></title>
   <link href="http://jldbasa.github.io/blog/categories/reference/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2013-10-20T08:10:15-07:00</updated>
+  <updated>2013-10-21T06:52:28-07:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -279,11 +279,21 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mkdir appname
 </span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>appname
 </span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> &amp;ldquo;source &amp;lsquo;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;https://rubygems.org&quot;</span>&gt;https://rubygems.org&lt;/a&gt;&amp;rsquo;&amp;rdquo; &gt; Gemfile
-</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> &amp;ldquo;gem &amp;lsquo;rails&amp;rsquo;, &amp;lsquo;~&gt; 4.0.0&amp;rsquo;&amp;rdquo; &gt;&gt; Gemfile
-</span><span class='line'><span class="nv">$ </span>bundle install &amp;mdash;path vendor
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> &amp;ldquo;gem &amp;lsquo;rails&amp;rsquo;, &amp;lsquo;~&gt; 4.0.0&amp;rsquo;&amp;rdquo; &gt;&gt; Gemfile&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;make sure that your ruby version is <span class="nb">set </span>before running the next commands. am&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;using version 2.0.0.&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="nv">$ </span>bundle install &amp;mdash;path vendor
 </span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new . &amp;mdash;skip-bundle
 </span><span class='line'><span class="nv">$ </span>bundle install &amp;mdash;path vendor
 </span><span class='line'><span class="nv">$ </span>rails -v
