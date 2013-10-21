@@ -27,6 +27,10 @@ $ mkdir appname
 $ cd appname
 $ echo "source 'https://rubygems.org'" > Gemfile
 $ echo "gem 'rails', '~> 4.0.0'" >> Gemfile
+
+# make sure that your ruby version is set before running the next commands. am
+# using version 2.0.0.
+
 $ bundle install --path vendor
 $ bundle exec rails new . --skip-bundle
 $ bundle install --path vendor
