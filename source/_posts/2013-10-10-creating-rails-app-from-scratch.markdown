@@ -32,7 +32,7 @@ $ echo "gem 'rails', '~> 4.0.0'" >> Gemfile
 # using version 2.0.0.
 
 $ bundle install --path vendor
-$ bundle exec rails new . --skip-bundle
+$ bundle exec rails new . --skip-bundle -d mysql
 $ bundle install --path vendor
 $ rails -v
 $ bundle package
