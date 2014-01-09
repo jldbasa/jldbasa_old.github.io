@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Reference | $ man jerome_]]></title>
   <link href="http://jldbasa.github.io/blog/categories/reference/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2013-10-21T06:52:28-07:00</updated>
+  <updated>2014-01-09T06:18:40-08:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -20,7 +20,7 @@
     <id>http://jldbasa.github.io/blog/2013/10/20/how-i-start-my-controller-spec</id>
     <content type="html"><![CDATA[<p>first, setup the data e.g.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
 </span><span class='line'><span class="n">let</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="p">}</span>
@@ -28,7 +28,7 @@
 
 <p>then define who has access to it e.g.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -48,7 +48,7 @@
 
 <p>if needed, i use <strong>shared examples</strong> e.g.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -62,13 +62,13 @@
 
 <p>and call them like this:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">it_behaves_like</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="kp">public</span> <span class="n">access</span> <span class="n">to</span> <span class="n">products</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>here&rsquo;s the full source for reference:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -252,7 +252,7 @@ will be regulary updated.</p>
     <content type="html"><![CDATA[<p>this is a trick i always use when i create a new project and i don&rsquo;t have rails gem
 installed globally. but before i put the commands, here&rsquo;s my current setup:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -269,7 +269,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 
 <p>here are the commands:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -294,7 +294,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </span><span class='line'>&lt;h1&gt;using version 2.0.0.&lt;/h1&gt;
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;<span class="nv">$ </span>bundle install &amp;mdash;path vendor
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new . &amp;mdash;skip-bundle
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new . &amp;mdash;skip-bundle -d mysql
 </span><span class='line'><span class="nv">$ </span>bundle install &amp;mdash;path vendor
 </span><span class='line'><span class="nv">$ </span>rails -v
 </span><span class='line'><span class="nv">$ </span>bundle package
@@ -314,19 +314,19 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 
 <ul>
 <li><p>undo last commit, put changes to staging
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git reset &amp;mdash;soft HEAD^
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>new message, change the last commit
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git commit &amp;mdash;amend -m
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>undo last commit and all changes
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git reset &amp;mdash;hard HEAD^
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>undo 2 commits and all changes
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git reset &amp;mdash;hard HEAD^^
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 </ul>
@@ -336,23 +336,23 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 
 <ul>
 <li><p>add new remotes
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote add &lt;name&gt; &lt;address&gt;
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>remove remotes
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote rm &lt;name&gt;
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>push to remotes
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git push -u &lt;name&gt; &lt;branch&gt;
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>remote show
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote show origin
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>clean-up deleted remote branches
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote prune origin  &lt;br/&gt;
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 </ul>
@@ -362,19 +362,19 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 
 <ul>
 <li><p>list all tags
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git tag
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>checkout code commit
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git checkout v0.0.1
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>add new tag
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git tag -a v0.0.3 -m &amp;ldquo;version 0.0.3&amp;rdquo;
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>push new tags
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git push &amp;mdash;tags
 </span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 </ul>

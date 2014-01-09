@@ -92,7 +92,8 @@ let(:admin) { FactoryGirl.create(:admin) } then define who has access to it e &h
 
 <time datetime="2013-10-20T08:04:00-07:00" pubdate data-updated="true">Oct 20<span>th</span>, 2013</time>
         
-         | <a href="/blog/2013/10/20/how-i-start-my-controller-spec/#disqus_thread">Comments</a>
+           | <a href="/blog/2013/10/20/how-i-start-my-controller-spec/#disqus_thread"
+             data-disqus-identifier="http://jldbasa.github.io/blog/2013/10/20/how-i-start-my-controller-spec/">Comments</a>
         
       </p>
     
@@ -101,7 +102,7 @@ let(:admin) { FactoryGirl.create(:admin) } then define who has access to it e &h
 
   <div class="entry-content"><p>first, setup the data e.g.</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
 </span><span class='line'><span class="n">let</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="p">}</span>
@@ -110,7 +111,7 @@ let(:admin) { FactoryGirl.create(:admin) } then define who has access to it e &h
 
 <p>then define who has access to it e.g.</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -131,7 +132,7 @@ let(:admin) { FactoryGirl.create(:admin) } then define who has access to it e &h
 
 <p>if needed, i use <strong>shared examples</strong> e.g.</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -146,14 +147,14 @@ let(:admin) { FactoryGirl.create(:admin) } then define who has access to it e &h
 
 <p>and call them like this:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">it_behaves_like</span> <span class="s2">&quot;public access to products&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>here&rsquo;s the full source for reference:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -293,7 +294,8 @@ let(:admin) { FactoryGirl.create(:admin) } then define who has access to it e &h
 
 <time datetime="2013-10-13T07:00:00-07:00" pubdate data-updated="true">Oct 13<span>th</span>, 2013</time>
         
-         | <a href="/blog/2013/10/13/favorite-gems/#disqus_thread">Comments</a>
+           | <a href="/blog/2013/10/13/favorite-gems/#disqus_thread"
+             data-disqus-identifier="http://jldbasa.github.io/blog/2013/10/13/favorite-gems/">Comments</a>
         
       </p>
     
@@ -358,7 +360,8 @@ will be regulary updated.</p>
 
 <time datetime="2013-10-10T10:47:00-07:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
         
-         | <a href="/blog/2013/10/10/creating-rails-app-from-scratch/#disqus_thread">Comments</a>
+           | <a href="/blog/2013/10/10/creating-rails-app-from-scratch/#disqus_thread"
+             data-disqus-identifier="http://jldbasa.github.io/blog/2013/10/10/creating-rails-app-from-scratch/">Comments</a>
         
       </p>
     
@@ -368,7 +371,7 @@ will be regulary updated.</p>
   <div class="entry-content"><p>this is a trick i always use when i create a new project and i don&rsquo;t have rails gem
 installed globally. but before i put the commands, here&rsquo;s my current setup:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -386,7 +389,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 
 <p>here are the commands:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -409,7 +412,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </span><span class='line'><span class="c"># using version 2.0.0.</span>
 </span><span class='line'>
 </span><span class='line'><span class="nv">$ </span>bundle install --path vendor
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new . --skip-bundle
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new . --skip-bundle -d mysql
 </span><span class='line'><span class="nv">$ </span>bundle install --path vendor
 </span><span class='line'><span class="nv">$ </span>rails -v
 </span><span class='line'><span class="nv">$ </span>bundle package
@@ -448,7 +451,8 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 
 <time datetime="2013-09-12T08:51:00-07:00" pubdate data-updated="true">Sep 12<span>th</span>, 2013</time>
         
-         | <a href="/blog/2013/09/12/git-dot-dot-dot-wtf-is/#disqus_thread">Comments</a>
+           | <a href="/blog/2013/09/12/git-dot-dot-dot-wtf-is/#disqus_thread"
+             data-disqus-identifier="http://jldbasa.github.io/blog/2013/09/12/git-dot-dot-dot-wtf-is/">Comments</a>
         
       </p>
     
@@ -464,7 +468,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git reset --soft HEAD^
 </span></code></pre></td></tr></table></div></figure>
 
@@ -474,7 +478,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git commit --amend -m
 </span></code></pre></td></tr></table></div></figure>
 
@@ -484,7 +488,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git reset --hard HEAD^
 </span></code></pre></td></tr></table></div></figure>
 
@@ -494,7 +498,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git reset --hard HEAD^^
 </span></code></pre></td></tr></table></div></figure>
 
@@ -506,7 +510,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote add &lt;name&gt; &lt;address&gt;
 </span></code></pre></td></tr></table></div></figure>
 
@@ -516,7 +520,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote rm &lt;name&gt;
 </span></code></pre></td></tr></table></div></figure>
 
@@ -526,7 +530,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git push -u &lt;name&gt; &lt;branch&gt;
 </span></code></pre></td></tr></table></div></figure>
 
@@ -536,7 +540,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote show origin
 </span></code></pre></td></tr></table></div></figure>
 
@@ -546,7 +550,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git remote prune origin
 </span></code></pre></td></tr></table></div></figure>
 
@@ -558,7 +562,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git tag
 </span></code></pre></td></tr></table></div></figure>
 
@@ -568,7 +572,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git checkout v0.0.1
 </span></code></pre></td></tr></table></div></figure>
 
@@ -578,7 +582,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git tag -a v0.0.3 -m <span class="s2">&quot;version 0.0.3&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -588,7 +592,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </ul>
 
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>git push --tags
 </span></code></pre></td></tr></table></div></figure>
 
@@ -624,7 +628,8 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 
 <time datetime="2013-08-19T11:29:00-07:00" pubdate data-updated="true">Aug 19<span>th</span>, 2013</time>
         
-         | <a href="/blog/2013/08/19/first-post/#disqus_thread">Comments</a>
+           | <a href="/blog/2013/08/19/first-post/#disqus_thread"
+             data-disqus-identifier="http://jldbasa.github.io/blog/2013/08/19/first-post/">Comments</a>
         
       </p>
     
@@ -692,7 +697,7 @@ a post, just generate and deploy your blog to Github via rake commands.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - jerome basa -
+  Copyright &copy; 2014 - jerome basa -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -707,7 +712,7 @@ a post, just generate and deploy your blog to Github via rake commands.</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>

@@ -87,7 +87,8 @@ installed globally. but before i put the commands, here& &hellip;">
 
 <time datetime="2013-10-10T10:47:00-07:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
         
-         | <a href="#disqus_thread">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://jldbasa.github.io">Comments</a>
         
       </p>
     
@@ -97,7 +98,7 @@ installed globally. but before i put the commands, here& &hellip;">
 <div class="entry-content"><p>this is a trick i always use when i create a new project and i don&rsquo;t have rails gem
 installed globally. but before i put the commands, here&rsquo;s my current setup:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -115,7 +116,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 
 <p>here are the commands:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -138,7 +139,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
 </span><span class='line'><span class="c"># using version 2.0.0.</span>
 </span><span class='line'>
 </span><span class='line'><span class="nv">$ </span>bundle install --path vendor
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new . --skip-bundle
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new . --skip-bundle -d mysql
 </span><span class='line'><span class="nv">$ </span>bundle install --path vendor
 </span><span class='line'><span class="nv">$ </span>rails -v
 </span><span class='line'><span class="nv">$ </span>bundle package
@@ -249,7 +250,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - jerome basa -
+  Copyright &copy; 2014 - jerome basa -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -267,7 +268,7 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
