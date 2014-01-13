@@ -4,7 +4,7 @@
   <title><![CDATA[$ man jerome_]]></title>
   <link href="http://jldbasa.github.io/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2014-01-12T21:37:45-08:00</updated>
+  <updated>2014-01-13T07:30:49-08:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -18,21 +18,20 @@
     <link href="http://jldbasa.github.io/blog/2014/01/12/rails-4-login-with-devise-and-facebook/"/>
     <updated>2014-01-12T08:43:00-08:00</updated>
     <id>http://jldbasa.github.io/blog/2014/01/12/rails-4-login-with-devise-and-facebook</id>
-    <content type="html"><![CDATA[<p>i&rsquo;ve recently created an application where you can login with its own
+    <content type="html"><![CDATA[<p>i recently created an application where you can login with its own
 authentication system and third party sites like facebook, twitter, linkedin, etc.
 for this task, i used <code>devise</code>, <code>omniauth</code> and <code>omniauth-facebook</code> gems.</p>
 
-<p>let&rsquo;s get started.</p>
+<p>make sure that you setup your facebook app. we&rsquo;ll use the fb app id and secret
+later. let&rsquo;s get started.</p>
 
-<p><strong>Gems</strong></p>
+<p><strong>Gems to use</strong></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">devise</span> <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
 </span><span class='line'><span class="n">rails</span> <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'><span class="n">omniauth</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">4</span><span class="p">)</span>
 </span><span class='line'><span class="n">omniauth</span><span class="o">-</span><span class="n">facebook</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -287,7 +286,10 @@ are not needed.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>and that&rsquo;s all there is to it.</p>
+<p>if you want to add twitter, linkedin, etc, just refer to their respective
+  omniauth gems.</p>
+
+<p>and that&rsquo;s all there is to it. hth.</p>
 ]]></content>
   </entry>
   
