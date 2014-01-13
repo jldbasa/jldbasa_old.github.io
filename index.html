@@ -9,10 +9,8 @@
   <meta name="author" content="jerome basa">
 
   
-  <meta name="description" content="first, setup the data e.g. 1
-2
-let(:user) { FactoryGirl.create(:user) }
-let(:admin) { FactoryGirl.create(:admin) } then define who has access to it e &hellip;">
+  <meta name="description" content="i&rsquo;ve recently created an application where you can login with its own
+authentication system and third party sites like facebook, twitter, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +66,314 @@ let(:admin) { FactoryGirl.create(:admin) } then define who has access to it e &h
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/12/rails-4-login-with-devise-and-facebook/">rails 4: login with devise and facebook</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-12T08:43:00-08:00" pubdate data-updated="true">Jan 12<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/01/12/rails-4-login-with-devise-and-facebook/#disqus_thread"
+             data-disqus-identifier="http://jldbasa.github.io/blog/2014/01/12/rails-4-login-with-devise-and-facebook/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>i&rsquo;ve recently created an application where you can login with its own
+authentication system and third party sites like facebook, twitter, linkedin, etc.
+for this task, i used <code>devise</code>, <code>omniauth</code> and <code>omniauth-facebook</code> gems.</p>
+
+<p>let&rsquo;s get started.</p>
+
+<p><strong>Gems</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">devise</span> <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
+</span><span class='line'><span class="n">rails</span> <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
+</span><span class='line'><span class="n">omniauth</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">4</span><span class="p">)</span>
+</span><span class='line'><span class="n">omniauth</span><span class="o">-</span><span class="n">facebook</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Model changes</h2>
+
+<p><strong>Create Authentication model</strong></p>
+
+<p>assuming you are using <code>User</code> model for devise, create the <code>Authentication</code> model.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rails g model Authentication user:references provider:string uid:string
+</span><span class='line'>token:string token_secret:string
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Setup table relations</strong></p>
+
+<figure class='code'><figcaption><span>app/model/users.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">has_many</span> <span class="ss">:authentications</span><span class="p">,</span> <span class="ss">dependent</span><span class="p">:</span> <span class="ss">:delete_all</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>app/model/authentications.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">belongs_to</span> <span class="ss">:user</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Add methods to user.rb</strong></p>
+
+<p>we need to override devise methods <code>password_required</code> and
+<code>update_with_password</code> since 3rd party authentications don&rsquo;t require password.</p>
+
+<figure class='code'><figcaption><span>app/model/users.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="c1">#...</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">apply_omniauth</span><span class="p">(</span><span class="n">omniauth</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;info&#39;</span><span class="o">][</span><span class="s1">&#39;nickname&#39;</span><span class="o">]</span> <span class="k">if</span> <span class="n">username</span><span class="o">.</span><span class="n">blank?</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;info&#39;</span><span class="o">][</span><span class="s1">&#39;email&#39;</span><span class="o">]</span> <span class="k">if</span> <span class="n">email</span><span class="o">.</span><span class="n">blank?</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">authentications</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="ss">:provider</span> <span class="o">=&gt;</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;provider&#39;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>                        <span class="ss">:uid</span> <span class="o">=&gt;</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;uid&#39;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>                        <span class="ss">:token</span> <span class="o">=&gt;</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;credentials&#39;</span><span class="o">].</span><span class="n">token</span><span class="p">,</span>
+</span><span class='line'>                        <span class="ss">:token_secret</span> <span class="o">=&gt;</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;credentials&#39;</span><span class="o">].</span><span class="n">secret</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">password_required?</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">authentications</span><span class="o">.</span><span class="n">empty?</span> <span class="o">||</span> <span class="o">!</span><span class="n">password</span><span class="o">.</span><span class="n">blank?</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="k">super</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">update_with_password</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="o">*</span><span class="n">options</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">encrypted_password</span><span class="o">.</span><span class="n">blank?</span>
+</span><span class='line'>      <span class="n">update_attributes</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="o">*</span><span class="n">options</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="k">super</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1">#...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Enable omniauth support in devise</strong></p>
+
+<p>add FB app id and secret. note that it&rsquo;s a good practice to get them from ENV,
+i use <code>figaro</code> gem to do this.</p>
+
+<figure class='code'><figcaption><span>config/initializers/devise.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">omniauth</span> <span class="ss">:facebook</span><span class="p">,</span> <span class="no">Figaro</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">fb_app_id</span><span class="p">,</span> <span class="no">Figaro</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">fb_app_secret</span><span class="p">,</span>
+</span><span class='line'><span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">&#39;email, user_location, publish_actions&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>app/models/user.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># add :omniauthable</span>
+</span><span class='line'><span class="n">devise</span> <span class="ss">:database_authenticatable</span><span class="p">,</span> <span class="ss">:registerable</span><span class="p">,</span>
+</span><span class='line'>       <span class="ss">:recoverable</span><span class="p">,</span> <span class="ss">:rememberable</span><span class="p">,</span> <span class="ss">:trackable</span><span class="p">,</span> <span class="ss">:validatable</span><span class="p">,</span>
+</span><span class='line'>       <span class="ss">:omniauthable</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Controller changes</h2>
+
+<p><strong>Create authentications and registrations controller</strong></p>
+
+<p>we need callbacks for omniauth that&rsquo;s why we&rsquo;re creating <code>authentications</code>
+controller and <code>registrations</code> controller to override some of devise
+functionalities.</p>
+
+<figure class='code'><figcaption><span>config/routes.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">devise_for</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="ss">controllers</span><span class="p">:</span> <span class="p">{</span><span class="n">omniauth_callbacks</span><span class="p">:</span>
+</span><span class='line'><span class="s2">&quot;authentications&quot;</span><span class="p">,</span> <span class="ss">registrations</span><span class="p">:</span> <span class="s2">&quot;registrations&quot;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>app/controllers/registrations_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">RegistrationsController</span> <span class="o">&lt;</span> <span class="ss">Devise</span><span class="p">:</span><span class="ss">:RegistrationsController</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">create</span>
+</span><span class='line'>    <span class="k">super</span>
+</span><span class='line'>    <span class="n">session</span><span class="o">[</span><span class="s1">&#39;devise.omniauth&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="kp">nil</span> <span class="k">unless</span> <span class="vi">@user</span><span class="o">.</span><span class="n">new_record?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">build_resource</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">super</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">session</span><span class="o">[</span><span class="s1">&#39;devise.omniauth&#39;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@user</span><span class="o">.</span><span class="n">apply_omniauth</span><span class="p">(</span><span class="n">session</span><span class="o">[</span><span class="s1">&#39;devise.omniauth&#39;</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@user</span><span class="o">.</span><span class="n">valid?</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>app/controllers/authentications_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AuthenticationsController</span> <span class="o">&lt;</span>  <span class="ss">Devise</span><span class="p">:</span><span class="ss">:OmniauthCallbacksController</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">all</span>
+</span><span class='line'>    <span class="n">omniauth</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">env</span><span class="o">[</span><span class="s2">&quot;omniauth.auth&quot;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">authentication</span> <span class="o">=</span> <span class="no">Authentication</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">provider</span><span class="p">:</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;provider&#39;</span><span class="o">]</span><span class="p">,</span> <span class="ss">uid</span><span class="p">:</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;uid&#39;</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">take</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">authentication</span>
+</span><span class='line'>      <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Logged in Successfully&quot;</span>
+</span><span class='line'>      <span class="n">sign_in_and_redirect</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">authentication</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="n">current_user</span>
+</span><span class='line'>      <span class="n">token</span> <span class="o">=</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;credentials&#39;</span><span class="o">].</span><span class="n">token</span>
+</span><span class='line'>      <span class="n">token_secret</span> <span class="o">=</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;credentials&#39;</span><span class="o">].</span><span class="n">has_key?</span><span class="p">(</span><span class="s1">&#39;secret&#39;</span><span class="p">)</span> <span class="p">?</span>  <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;credentials&#39;</span><span class="o">].</span><span class="n">secret</span> <span class="p">:</span> <span class="kp">nil</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">current_user</span><span class="o">.</span><span class="n">authentications</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span><span class="ss">:provider</span> <span class="o">=&gt;</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;provider&#39;</span><span class="o">]</span><span class="p">,</span> <span class="ss">:uid</span> <span class="o">=&gt;</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;uid&#39;</span><span class="o">]</span><span class="p">,</span> <span class="ss">:token</span> <span class="o">=&gt;</span> <span class="n">token</span><span class="p">,</span> <span class="ss">:token_secret</span> <span class="o">=&gt;</span> <span class="n">token_secret</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Authentication successful.&quot;</span>
+</span><span class='line'>      <span class="n">sign_in_and_redirect</span> <span class="n">current_user</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>      <span class="n">user</span><span class="o">.</span><span class="n">apply_omniauth</span><span class="p">(</span><span class="n">omniauth</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">session</span><span class="o">[</span><span class="s1">&#39;devise.omniauth&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">omniauth</span><span class="o">.</span><span class="n">except</span><span class="p">(</span><span class="s1">&#39;extra&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">redirect_to</span> <span class="n">new_user_registration_path</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">alias_method</span> <span class="ss">:facebook</span><span class="p">,</span> <span class="ss">:all</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Views changes</h2>
+
+<figure class='code'><figcaption><span>app/views/layout/application.htm.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;%=</span> <span class="n">link_to</span> <span class="s1">&#39;Login with FB&#39;</span><span class="p">,</span> <span class="n">user_omniauth_authorize_path</span><span class="p">(</span><span class="ss">:facebook</span><span class="p">)</span> <span class="o">%&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>hide passwords field in devise <code>new</code> and <code>edit</code> templates of <code>registrations</code> if they
+are not needed.</p>
+
+<figure class='code'><figcaption><span>app/views/devise/registrations/new.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sx">% if </span><span class="n">f</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">password_required?</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">  &lt;%= f.input :password, required: true, label: false, input_html: { class: &#39;form-control&#39; }, placeholder: &#39;Password&#39;  %&gt;</span>
+</span><span class='line'>  <span class="o">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:password_confirmation</span><span class="p">,</span> <span class="ss">required</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">label</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span> <span class="n">input_html</span><span class="p">:</span> <span class="p">{</span> <span class="ss">class</span><span class="p">:</span> <span class="s1">&#39;form-control&#39;</span> <span class="p">},</span> <span class="ss">placeholder</span><span class="p">:</span> <span class="s1">&#39;Confirm Password&#39;</span>  <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">&lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and that&rsquo;s all there is to it.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -665,6 +971,10 @@ a post, just generate and deploy your blog to Github via rake commands.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/01/12/rails-4-login-with-devise-and-facebook/">rails 4: login with devise and facebook</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/20/how-i-start-my-controller-spec/">how i start my controller spec</a>
       </li>
     
@@ -678,10 +988,6 @@ a post, just generate and deploy your blog to Github via rake commands.</p>
     
       <li class="post">
         <a href="/blog/2013/09/12/git-dot-dot-dot-wtf-is/">&#8216;git&#8230; wtf is ____?&#8217;</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/19/first-post/">first post</a>
       </li>
     
   </ul>

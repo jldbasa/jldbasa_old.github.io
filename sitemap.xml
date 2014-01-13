@@ -21,12 +21,18 @@
         <lastmod>2013-10-26T06:14:34-07:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://jldbasa.github.io/blog/2014/01/12/rails-4-login-with-devise-and-facebook/
+        </loc>
+        <lastmod>2014-01-12T21:37:30-08:00</lastmod>
+    </url>
+    <url>
         <loc>http://jldbasa.github.io/blog/archives/</loc>
-        <lastmod>2014-01-09T06:15:47-08:00</lastmod>
+        <lastmod>2014-01-12T21:37:30-08:00</lastmod>
     </url>
     <url>
         <loc>http://jldbasa.github.io/</loc>
-        <lastmod>2014-01-09T06:15:47-08:00</lastmod>
+        <lastmod>2014-01-12T21:37:30-08:00</lastmod>
     </url>
     <url>
         <loc>http://jldbasa.github.io/robots.txt</loc>
