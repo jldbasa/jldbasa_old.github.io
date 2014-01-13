@@ -6,18 +6,18 @@ comments: true
 categories: 
 ---
 
-i've recently created an application where you can login with its own
+i recently created an application where you can login with its own
 authentication system and third party sites like facebook, twitter, linkedin, etc. 
 for this task, i used `devise`, `omniauth` and `omniauth-facebook` gems.
 
-let's get started.
+make sure that you setup your facebook app. we'll use the fb app id and secret
+later. let's get started.
 
-**Gems**
+**Gems to use**
 
 {% codeblock lang:ruby %}
 devise (3.2.2)
 rails (4.0.2)
-omniauth (1.1.4)
 omniauth-facebook (1.5.1)
 {% endcodeblock %}
 
@@ -177,4 +177,7 @@ are not needed.
 <% end %>
 {% endcodeblock %}
 
-and that's all there is to it.
+if you want to add twitter, linkedin, etc, just refer to their respective
+  omniauth gems. 
+
+and that's all there is to it. hth.
