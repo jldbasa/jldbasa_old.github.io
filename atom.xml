@@ -4,7 +4,7 @@
   <title><![CDATA[$ man jerome_]]></title>
   <link href="http://jldbasa.github.io/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2014-01-13T07:30:49-08:00</updated>
+  <updated>2014-01-25T07:21:04-08:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -12,6 +12,255 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[rails 4: paypal express checkout integration using activemerchant]]></title>
+    <link href="http://jldbasa.github.io/blog/2014/01/25/rails-4-paypal-express-checkout-integration/"/>
+    <updated>2014-01-25T05:35:00-08:00</updated>
+    <id>http://jldbasa.github.io/blog/2014/01/25/rails-4-paypal-express-checkout-integration</id>
+    <content type="html"><![CDATA[<p>in this post, i will share on how i integrated Paypal&rsquo;s Express checkout in a rails 4 application using <code>activemerchant</code> gem. some of the code are based on <a href="http://railscasts.com/episodes/146-paypal-express-checkout">Railscasts Ep. 146</a>.</p>
+
+<p><strong>before proceeding, make sure you have or did the following:</strong></p>
+
+<ul>
+<li><a href="http://developer.paypal.com">Paypal developer account</a></li>
+<li>create Paypal sandbox accounts: merchant and buyer(go to Applications » Sandbox Accounts)</li>
+</ul>
+
+
+<p><strong>Gems to use</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">activemerchant</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">42</span><span class="o">.</span><span class="mi">4</span><span class="p">)</span>
+</span><span class='line'><span class="n">rails</span> <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Setup Activemerchant</h2>
+
+<figure class='code'><figcaption><span>config/environments/developer.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">after_initialize</span> <span class="k">do</span>
+</span><span class='line'>  <span class="ss">ActiveMerchant</span><span class="p">:</span><span class="ss">:Billing</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="ss">:test</span>
+</span><span class='line'>  <span class="n">paypal_options</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="ss">login</span><span class="p">:</span> <span class="s2">&quot;API_USERNAME_HERE&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">password</span><span class="p">:</span> <span class="s2">&quot;API_PASSWORD_HERE&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">signature</span><span class="p">:</span> <span class="s2">&quot;API_SIGNATURE_HERE&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="o">::</span><span class="no">EXPRESS_GATEWAY</span> <span class="o">=</span> <span class="ss">ActiveMerchant</span><span class="p">:</span><span class="ss">:Billing</span><span class="o">::</span><span class="no">PaypalExpressGateway</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">paypal_options</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>config/environments/test.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">after_initialize</span> <span class="k">do</span>
+</span><span class='line'>  <span class="ss">ActiveMerchant</span><span class="p">:</span><span class="ss">:Billing</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="ss">:test</span>
+</span><span class='line'>  <span class="o">::</span><span class="no">EXPRESS_GATEWAY</span> <span class="o">=</span> <span class="ss">ActiveMerchant</span><span class="p">:</span><span class="ss">:Billing</span><span class="o">::</span><span class="no">BogusGateway</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Model changes</h2>
+
+<p>this really depends on your app. maybe you have a <code>carts</code> and <code>orders</code> tables. or <code>bookings</code> and <code>reservations</code> tables. assuming you have <code>carts</code> and <code>orders</code> tables, you&rsquo;ll have the following fields.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>carts
+</span><span class='line'> - id
+</span><span class='line'> - total_amount_cents
+</span><span class='line'> - purchased_at
+</span><span class='line'> - created_at
+</span><span class='line'> - updated_at
+</span><span class='line'> 
+</span><span class='line'>orders
+</span><span class='line'> - id
+</span><span class='line'> - cart_id
+</span><span class='line'> - ip
+</span><span class='line'> - express_token
+</span><span class='line'> - express_payer_id</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>View Changes</h2>
+
+<p>after you add the <code>express_checkout</code> to your routes file; in your cart page, put the express paypal checkout button</p>
+
+<figure class='code'><figcaption><span>app/views/carts/index.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">link_to</span><span class="p">(</span><span class="n">image_tag</span><span class="p">(</span><span class="s2">&quot;https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif&quot;</span><span class="p">),</span> <span class="n">express_orders_path</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>IMPORTANT:</strong> Paypal wants you to use their buttons, so use them! LOL</p>
+
+<h2>Controller Changes</h2>
+
+<p>add the following actions in your <code>orders</code> controller.</p>
+
+<ul>
+<li><code>express_checkout</code> &ndash; this will setup your purchase and redirect to paypal.</li>
+<li><code>new</code> &ndash; a.k.a. Paypal&rsquo;s return URL. i usually add a &ldquo;Confirm Order&rdquo; button in this action. it&rsquo;s a good practice not to process the order right away.</li>
+<li><code>create</code> &ndash; create and purchase the order</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>app/controllers/orders_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">express_checkout</span>
+</span><span class='line'>  <span class="n">response</span> <span class="o">=</span> <span class="no">EXPRESS_GATEWAY</span><span class="o">.</span><span class="n">setup_purchase</span><span class="p">(</span><span class="no">YOUR_TOTAL_AMOUNT_IN_CENTS</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">ip</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">remote_ip</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">return_url</span><span class="p">:</span> <span class="no">YOUR_RETURN_URL_</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">cancel_return_url</span><span class="p">:</span> <span class="no">YOUR_CANCEL_RETURL_URL</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">currency</span><span class="p">:</span> <span class="s2">&quot;USD&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">allow_guest_checkout</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">items</span><span class="p">:</span> <span class="o">[</span><span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Order&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Order description&quot;</span><span class="p">,</span> <span class="ss">quantity</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="ss">amount</span><span class="p">:</span> <span class="no">AMOUNT_IN_CENTS</span><span class="p">}</span><span class="o">]</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'>  <span class="n">redirect_to</span> <span class="no">EXPRESS_GATEWAY</span><span class="o">.</span><span class="n">redirect_url_for</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">new</span>
+</span><span class='line'>  <span class="vi">@order</span> <span class="o">=</span> <span class="no">Order</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:express_token</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:token</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">create</span>
+</span><span class='line'>  <span class="vi">@order</span> <span class="o">=</span> <span class="vi">@cart</span><span class="o">.</span><span class="n">build_order</span><span class="p">(</span><span class="n">order_params</span><span class="p">)</span>
+</span><span class='line'>  <span class="vi">@order</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">remote_ip</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="vi">@order</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>    <span class="k">if</span> <span class="vi">@order</span><span class="o">.</span><span class="n">purchase</span> <span class="c1"># this is where we purchase the order. refer to the model method below</span>
+</span><span class='line'>      <span class="n">redirect_to</span> <span class="n">order_url</span><span class="p">(</span><span class="vi">@order</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">render</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;failure&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="n">render</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s1">&#39;new&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>IMPORTANT:</strong> the total_amount must be equal to the total amount of <code>items</code> in the array of hashes or else you will get errors.</p>
+
+<h2>Model Changes</h2>
+
+<figure class='code'><figcaption><span>app/models/order.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Order</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:cart</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">purchase</span>
+</span><span class='line'>    <span class="n">response</span> <span class="o">=</span> <span class="no">EXPRESS_GATEWAY</span><span class="o">.</span><span class="n">purchase</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">total_amount_cents</span><span class="p">,</span> <span class="n">express_purchase_options</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">cart</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="ss">:purchased_at</span><span class="p">,</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="p">)</span> <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">success?</span>
+</span><span class='line'>    <span class="n">response</span><span class="o">.</span><span class="n">success?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">express_token</span><span class="o">=</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">[</span><span class="ss">:express_token</span><span class="o">]</span> <span class="o">=</span> <span class="n">token</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">new_record?</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">token</span><span class="o">.</span><span class="n">blank?</span>
+</span><span class='line'>      <span class="c1"># you can dump details var if you need more info from buyer</span>
+</span><span class='line'>      <span class="n">details</span> <span class="o">=</span> <span class="no">EXPRESS_GATEWAY</span><span class="o">.</span><span class="n">details_for</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">express_payer_id</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">payer_id</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">express_purchase_options</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="ss">:ip</span> <span class="o">=&gt;</span> <span class="n">ip</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:token</span> <span class="o">=&gt;</span> <span class="n">express_token</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:payer_id</span> <span class="o">=&gt;</span> <span class="n">express_payer_id</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and that&rsquo;s all there is to it. hth.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[rails 4: login with devise and facebook]]></title>
