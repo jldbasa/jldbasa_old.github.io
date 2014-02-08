@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "'git... wtf is ____?'"
+title: "'git... what is ____?'"
 date: 2013-09-12 08:51
 comments: true
 categories: [Reference]
