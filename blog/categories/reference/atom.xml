@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Reference | $ man jerome_]]></title>
   <link href="http://jldbasa.github.io/blog/categories/reference/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2014-01-25T07:21:04-08:00</updated>
+  <updated>2014-02-08T10:32:50-08:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -304,10 +304,10 @@ need to specify the <code>--path vendor</code> when running bundle install.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA['git... wtf is ____?']]></title>
-    <link href="http://jldbasa.github.io/blog/2013/09/12/git-dot-dot-dot-wtf-is/"/>
+    <title type="html"><![CDATA['git... what is ____?']]></title>
+    <link href="http://jldbasa.github.io/blog/2013/09/12/git-dot-dot-dot-what-is/"/>
     <updated>2013-09-12T08:51:00-07:00</updated>
-    <id>http://jldbasa.github.io/blog/2013/09/12/git-dot-dot-dot-wtf-is</id>
+    <id>http://jldbasa.github.io/blog/2013/09/12/git-dot-dot-dot-what-is</id>
     <content type="html"><![CDATA[<blockquote><p>some git notes i put together for reference</p></blockquote>
 
 <h2>Rollback changes</h2>
