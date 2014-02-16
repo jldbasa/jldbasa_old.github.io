@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Good Practice | $ man jerome_]]></title>
+  <link href="http://jldbasa.github.io/blog/categories/good-practice/atom.xml" rel="self"/>
+  <link href="http://jldbasa.github.io/"/>
+  <updated>2014-02-16T08:15:43-08:00</updated>
+  <id>http://jldbasa.github.io/</id>
+  <author>
+    <name><![CDATA[jerome basa]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[mysql user minimum required privileges for rails]]></title>
+    <link href="http://jldbasa.github.io/blog/2014/02/14/mysql-user-minimum-required-privileges-for-rails/"/>
+    <updated>2014-02-14T09:51:00-08:00</updated>
+    <id>http://jldbasa.github.io/blog/2014/02/14/mysql-user-minimum-required-privileges-for-rails</id>
+    <content type="html"><![CDATA[<p>if your application uses <code>root</code> as your database username; you&rsquo;re doing it wrong.
+  a good practice is you should have two users for your application. let say
+  i have a database called <code>blog_production</code>, i will have two users in my
+  database: <code>blog</code> and <code>blog_admin</code>. the former will be use for regular stuff,
+  and the latter for database administration. each db user have diffrent set of privileges.</p>
+
+<ul>
+<li><code>blog</code> user privileges
+
+<ul>
+<li>Select</li>
+<li>Insert</li>
+<li>Update</li>
+<li>Delete</li>
+<li>Lock</li>
+</ul>
+</li>
+<li><code>blog_admin</code> user privileges
+
+<ul>
+<li>Select</li>
+<li>Insert</li>
+<li>Update</li>
+<li>Delete</li>
+<li>Lock</li>
+<li>Create</li>
+<li>Drop</li>
+<li>Index</li>
+<li>Alter</li>
+</ul>
+</li>
+</ul>
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='mysql'><span class='line'><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">blog_production</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="n">USER</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">blog</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">@&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">localhost</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">db_password</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;;</span>
+</span><span class='line'><span class="k">GRANT</span> <span class="k">Select</span><span class="p">,</span><span class="k">Insert</span><span class="p">,</span><span class="k">Update</span><span class="p">,</span><span class="k">Delete</span><span class="p">,</span><span class="k">Lock</span> <span class="kp">Tables</span> <span class="k">ON</span> <span class="n">blog_production</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">blog</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">@&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">localhost</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="n">USER</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">blog_admin</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">@&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">localhost</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">db_password</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;;</span>
+</span><span class='line'><span class="k">GRANT</span> <span class="k">Select</span><span class="p">,</span><span class="k">Insert</span><span class="p">,</span><span class="k">Update</span><span class="p">,</span><span class="k">Delete</span><span class="p">,</span><span class="k">Create</span><span class="p">,</span><span class="k">Drop</span><span class="p">,</span><span class="k">Index</span><span class="p">,</span><span class="k">Alter</span><span class="p">,</span><span class="k">Lock</span> <span class="kp">Tables</span> <span class="k">ON</span> <span class="n">blog_production</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">blog_admin</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">@&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">localhost</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">FLUSH</span> <span class="n">PRIVILEGES</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>now, how do you use this two users in your rails app? in <code>databases.yml</code>, add a check for <code>DB_ADMIN</code> env var.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/databases.yml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="no">DB_ADMIN</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">]&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;username = &quot;blog_admin&quot;</span>
+</span><span class='line'><span class="sr">password = &quot;11111111&quot;</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  else&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;blog&quot;</span>
+</span><span class='line'><span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;22222222&quot;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">production:</span>
+</span><span class='line'><span class="sx">  adapter: mysql2</span>
+</span><span class='line'><span class="sx">  encoding: utf8</span>
+</span><span class='line'><span class="sx">  reconnect: false</span>
+</span><span class='line'><span class="sx">  database: blog_production</span>
+</span><span class='line'><span class="sx">  pool: 5</span>
+</span><span class='line'><span class="sx">  username: &amp;lt;%= username %&gt;</span>
+</span><span class='line'>  <span class="ss">password</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%=</span> <span class="n">password</span> <span class="o">%&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>by default it uses <code>blog</code> db username unless you pass <code>DB_ADMIN=true</code> env var.
+the reasone we have this env is because we need to pass it when we run
+migration  tasks e.g:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ DB_ADMIN</span><span class="o">=</span><span class="nb">true </span>bundle <span class="nb">exec </span>rails db:migrate
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>if you use <strong>capistrano</strong> for deployment, you need to set <code>migrate_env</code> var.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/deploy.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:migrate_env</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">DB_ADMIN</span><span class="o">=</span><span class="kp">true</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>if you have better method, hit the comments.</p>
+
+<p>and that&rsquo;s all there is to it. hth.</p>
+]]></content>
+  </entry>
+  
+</feed>
