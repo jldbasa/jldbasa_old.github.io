@@ -2,52 +2,52 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://jldbasa.github.io/blog/2013/08/19/first-post/</loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
     <url>
         <loc>http://jldbasa.github.io/blog/2013/09/12/git-dot-dot-dot-what-is/</loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
     <url>
         <loc>http://jldbasa.github.io/blog/2013/10/10/creating-rails-app-from-scratch/</loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
     <url>
         <loc>http://jldbasa.github.io/blog/2013/10/13/favorite-gems/</loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
     <url>
         <loc>http://jldbasa.github.io/blog/2013/10/20/how-i-start-my-controller-spec/</loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
     <url>
         <loc>
             http://jldbasa.github.io/blog/2014/01/12/rails-4-login-with-devise-and-facebook/
         </loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
     <url>
         <loc>
             http://jldbasa.github.io/blog/2014/01/25/rails-4-paypal-express-checkout-integration/
         </loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
     <url>
         <loc>
             http://jldbasa.github.io/blog/2014/02/14/mysql-user-minimum-required-privileges-for-rails/
         </loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
     <url>
         <loc>http://jldbasa.github.io/blog/archives/</loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
     <url>
         <loc>http://jldbasa.github.io/</loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
     <url>
         <loc>http://jldbasa.github.io/robots.txt</loc>
-        <lastmod>2014-02-16T08:24:26-08:00</lastmod>
+        <lastmod>2014-02-17T06:25:02-08:00</lastmod>
     </url>
 </urlset>
