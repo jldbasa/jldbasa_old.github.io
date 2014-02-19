@@ -3,7 +3,7 @@ layout: post
 title: "rails 4: paypal express checkout integration using activemerchant"
 date: 2014-01-25 05:35
 comments: true
-categories: 
+categories: [Rails]
 ---
 in this post, i will share on how i integrated Paypal's Express checkout in a rails 4 application using `activemerchant` gem. some of the code are based on [Railscasts Ep. 146](http://railscasts.com/episodes/146-paypal-express-checkout).
 

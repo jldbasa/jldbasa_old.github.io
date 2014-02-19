@@ -3,7 +3,7 @@ layout: post
 title: "how i start my controller spec"
 date: 2013-10-20 08:04
 comments: true
-categories: Reference
+categories: [Rails]
 ---
 first, setup the data e.g.
 

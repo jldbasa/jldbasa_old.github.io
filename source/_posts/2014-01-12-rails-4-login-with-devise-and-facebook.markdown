@@ -3,7 +3,7 @@ layout: post
 title: "rails 4: login with devise and facebook"
 date: 2014-01-12 08:43
 comments: true
-categories: 
+categories: [Rails]
 ---
 
 i recently created an application where you can login with its own

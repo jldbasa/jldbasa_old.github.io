@@ -3,7 +3,7 @@ layout: post
 title: "creating rails app from scratch"
 date: 2013-10-10 10:47
 comments: true
-categories: [Reference]
+categories: [Rails]
 ---
 this is a trick i always use when i create a new project and i don't have rails gem
 installed globally. but before i put the commands, here's my current setup:
