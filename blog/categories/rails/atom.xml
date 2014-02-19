@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | $ man jerome_]]></title>
   <link href="http://jldbasa.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2014-02-17T06:39:27-08:00</updated>
+  <updated>2014-02-19T08:46:10-08:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -141,6 +141,856 @@ migration  tasks e.g:</p>
 <p>if you have better method, hit the comments.</p>
 
 <p>and that&rsquo;s all there is to it. hth.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[rails 4: paypal express checkout integration using activemerchant]]></title>
+    <link href="http://jldbasa.github.io/blog/2014/01/25/rails-4-paypal-express-checkout-integration/"/>
+    <updated>2014-01-25T05:35:00-08:00</updated>
+    <id>http://jldbasa.github.io/blog/2014/01/25/rails-4-paypal-express-checkout-integration</id>
+    <content type="html"><![CDATA[<p>in this post, i will share on how i integrated Paypal&rsquo;s Express checkout in a rails 4 application using <code>activemerchant</code> gem. some of the code are based on <a href="http://railscasts.com/episodes/146-paypal-express-checkout">Railscasts Ep. 146</a>.</p>
+
+<p><strong>before proceeding, make sure you have or did the following:</strong></p>
+
+<ul>
+<li><a href="http://developer.paypal.com">Paypal developer account</a></li>
+<li>create Paypal sandbox accounts: merchant and buyer(go to Applications » Sandbox Accounts)</li>
+</ul>
+
+
+<p><strong>Gems to use</strong></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">activemerchant</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">42</span><span class="o">.</span><span class="mi">4</span><span class="p">)</span>
+</span><span class='line'><span class="n">rails</span> <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Setup Activemerchant</h2>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/environments/developer.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">after_initialize</span> <span class="k">do</span>
+</span><span class='line'>  <span class="ss">ActiveMerchant</span><span class="p">:</span><span class="ss">:Billing</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="ss">:test</span>
+</span><span class='line'>  <span class="n">paypal_options</span> <span class="o">=</span> <span class="p">{</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;login: &quot;API_USERNAME_HERE&quot;,</span>
+</span><span class='line'><span class="sr">password: &quot;API_PASSWORD_HERE&quot;,</span>
+</span><span class='line'><span class="sr">signature: &quot;API_SIGNATURE_HERE&quot;</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  }</span>
+</span><span class='line'><span class="sr">  ::EXPRESS_GATEWAY = ActiveMerchant::Billing::PaypalExpressGateway.new(paypal_options)</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/environments/test.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">after_initialize</span> <span class="k">do</span>
+</span><span class='line'>  <span class="ss">ActiveMerchant</span><span class="p">:</span><span class="ss">:Billing</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="ss">:test</span>
+</span><span class='line'>  <span class="o">::</span><span class="no">EXPRESS_GATEWAY</span> <span class="o">=</span> <span class="ss">ActiveMerchant</span><span class="p">:</span><span class="ss">:Billing</span><span class="o">::</span><span class="no">BogusGateway</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Model changes</h2>
+
+<p>this really depends on your app. maybe you have a <code>carts</code> and <code>orders</code> tables. or <code>bookings</code> and <code>reservations</code> tables. assuming you have <code>carts</code> and <code>orders</code> tables, you&rsquo;ll have the following fields.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>carts
+</span><span class='line'> &ndash; id
+</span><span class='line'> &ndash; total_amount_cents
+</span><span class='line'> &ndash; purchased_at
+</span><span class='line'> &ndash; created_at
+</span><span class='line'> &ndash; updated_at&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>orders
+</span><span class='line'> &ndash; id
+</span><span class='line'> &ndash; cart_id
+</span><span class='line'> &ndash; ip
+</span><span class='line'> &ndash; express_token
+</span><span class='line'> &ndash; express_payer_id&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>View Changes</h2>
+
+<p>after you add the <code>express_checkout</code> to your routes file; in your cart page, put the express paypal checkout button</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/carts/index.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">link_to</span><span class="p">(</span><span class="n">image_tag</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif&quot;</span><span class="o">&gt;</span><span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">www</span><span class="o">.</span><span class="n">paypal</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">en_US</span><span class="o">/</span><span class="n">i</span><span class="o">/</span><span class="n">btn</span><span class="o">/</span><span class="n">btn_xpressCheckout</span><span class="o">.</span><span class="n">gif</span><span class="o">&lt;</span><span class="sr">/a&gt;&amp;rdquo;), express_orders_path)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>IMPORTANT:</strong> Paypal wants you to use their buttons, so use them! LOL</p>
+
+<h2>Controller Changes</h2>
+
+<p>add the following actions in your <code>orders</code> controller.</p>
+
+<ul>
+<li><code>express_checkout</code> &ndash; this will setup your purchase and redirect to paypal.</li>
+<li><code>new</code> &ndash; a.k.a. Paypal&rsquo;s return URL. i usually add a &ldquo;Confirm Order&rdquo; button in this action. it&rsquo;s a good practice not to process the order right away.</li>
+<li><code>create</code> &ndash; create and purchase the order</li>
+</ul>
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/controllers/orders_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">express_checkout</span>
+</span><span class='line'>  <span class="n">response</span> <span class="o">=</span> <span class="no">EXPRESS_GATEWAY</span><span class="o">.</span><span class="n">setup_purchase</span><span class="p">(</span><span class="no">YOUR_TOTAL_AMOUNT_IN_CENTS</span><span class="p">,</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;ip: request.remote_ip,</span>
+</span><span class='line'><span class="sr">return_url: YOUR_RETURN_URL_,</span>
+</span><span class='line'><span class="sr">cancel_return_url: YOUR_CANCEL_RETURL_URL,</span>
+</span><span class='line'><span class="sr">currency: &quot;USD&quot;,</span>
+</span><span class='line'><span class="sr">allow_guest_checkout: true,</span>
+</span><span class='line'><span class="sr">items: [{name: &quot;Order&quot;, description: &quot;Order description&quot;, quantity: &quot;1&quot;, amount: AMOUNT_IN_CENTS}]</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  )</span>
+</span><span class='line'><span class="sr">  redirect_to EXPRESS_GATEWAY.redirect_url_for(response.token)</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">new</span>
+</span><span class='line'>  <span class="vi">@order</span> <span class="o">=</span> <span class="no">Order</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:express_token</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:token</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;def create</span>
+</span><span class='line'><span class="sr">  @order = @cart.build_order(order_params)</span>
+</span><span class='line'><span class="sr">  @order.ip = request.remote_ip&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">if</span> <span class="vi">@order</span><span class="o">.</span><span class="n">save</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;if @order.purchase # this is where we purchase the order. refer to the model method below</span>
+</span><span class='line'><span class="sr">  redirect_to order_url(@order)</span>
+</span><span class='line'><span class="sr">else</span>
+</span><span class='line'><span class="sr">  render :action =&amp;gt; &quot;failure&quot;</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  else&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">render</span> <span class="ss">:action</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="s1">&#39;new&#39;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>IMPORTANT:</strong> the total_amount must be equal to the total amount of <code>items</code> in the array of hashes or else you will get errors.</p>
+
+<h2>Model Changes</h2>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/models/order.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Order</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:cart</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  def purchase&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">response</span> <span class="o">=</span> <span class="no">EXPRESS_GATEWAY</span><span class="o">.</span><span class="n">purchase</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">total_amount_cents</span><span class="p">,</span> <span class="n">express_purchase_options</span><span class="p">)</span>
+</span><span class='line'><span class="n">cart</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="ss">:purchased_at</span><span class="p">,</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="p">)</span> <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">success?</span>
+</span><span class='line'><span class="n">response</span><span class="o">.</span><span class="n">success?</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  def express_token=(token)&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">self</span><span class="o">[</span><span class="ss">:express_token</span><span class="o">]</span> <span class="o">=</span> <span class="n">token</span>
+</span><span class='line'><span class="k">if</span> <span class="n">new_record?</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="o">!</span><span class="n">token</span><span class="o">.</span><span class="n">blank?</span>
+</span><span class='line'>  <span class="c1"># you can dump details var if you need more info from buyer</span>
+</span><span class='line'>  <span class="n">details</span> <span class="o">=</span> <span class="no">EXPRESS_GATEWAY</span><span class="o">.</span><span class="n">details_for</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</span><span class='line'>  <span class="nb">self</span><span class="o">.</span><span class="n">express_payer_id</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">payer_id</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  private&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">express_purchase_options</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;{</span>
+</span><span class='line'><span class="sr">  :ip =&amp;gt; ip,</span>
+</span><span class='line'><span class="sr">  :token =&amp;gt; express_token,</span>
+</span><span class='line'><span class="sr">  :payer_id =&amp;gt; express_payer_id</span>
+</span><span class='line'><span class="sr">}</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>and that&rsquo;s all there is to it. hth.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[rails 4: login with devise and facebook]]></title>
+    <link href="http://jldbasa.github.io/blog/2014/01/12/rails-4-login-with-devise-and-facebook/"/>
+    <updated>2014-01-12T08:43:00-08:00</updated>
+    <id>http://jldbasa.github.io/blog/2014/01/12/rails-4-login-with-devise-and-facebook</id>
+    <content type="html"><![CDATA[<p>i recently created an application where you can login with its own
+authentication system and third party sites like facebook, twitter, linkedin, etc.
+for this task, i used <code>devise</code>, <code>omniauth</code> and <code>omniauth-facebook</code> gems.</p>
+
+<p>make sure that you setup your facebook app. we&rsquo;ll use the fb app id and secret
+later. let&rsquo;s get started.</p>
+
+<p><strong>Gems to use</strong></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">devise</span> <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
+</span><span class='line'><span class="n">rails</span> <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
+</span><span class='line'><span class="n">omniauth</span><span class="o">-</span><span class="n">facebook</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Model changes</h2>
+
+<p><strong>Create Authentication model</strong></p>
+
+<p>assuming you are using <code>User</code> model for devise, create the <code>Authentication</code> model.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rails g model Authentication user:references provider:string uid:string
+</span><span class='line'>token:string token_secret:string
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>Setup table relations</strong></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/model/users.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">has_many</span> <span class="ss">:authentications</span><span class="p">,</span> <span class="ss">dependent</span><span class="p">:</span> <span class="ss">:delete_all</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/model/authentications.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">belongs_to</span> <span class="ss">:user</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>Add methods to user.rb</strong></p>
+
+<p>we need to override devise methods <code>password_required</code> and
+<code>update_with_password</code> since 3rd party authentications don&rsquo;t require password.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/model/users.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="c1">#&amp;hellip;</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">apply_omniauth</span><span class="p">(</span><span class="n">omniauth</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;self.username = omniauth[&#39;info&#39;][&#39;nickname&#39;] if username.blank?</span>
+</span><span class='line'><span class="sr">self.email = omniauth[&#39;info&#39;][&#39;email&#39;] if email.blank?</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">authentications.build(:provider =&amp;gt; omniauth[&#39;provider&#39;],</span>
+</span><span class='line'><span class="sr">                    :uid =&amp;gt; omniauth[&#39;uid&#39;],</span>
+</span><span class='line'><span class="sr">                    :token =&amp;gt; omniauth[&#39;credentials&#39;].token,</span>
+</span><span class='line'><span class="sr">                    :token_secret =&amp;gt; omniauth[&#39;credentials&#39;].secret)</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">password_required?</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;(authentications.empty? || !password.blank?) &amp;amp;&amp;amp; super</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">update_with_password</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="o">*</span><span class="n">options</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;if encrypted_password.blank?</span>
+</span><span class='line'><span class="sr">  update_attributes(params, *options)</span>
+</span><span class='line'><span class="sr">else</span>
+</span><span class='line'><span class="sr">  super</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">  #&amp;hellip;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>Enable omniauth support in devise</strong></p>
+
+<p>add FB app id and secret. note that it&rsquo;s a good practice to get them from ENV,
+i use <code>figaro</code> gem to do this.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/initializers/devise.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">omniauth</span> <span class="ss">:facebook</span><span class="p">,</span> <span class="no">Figaro</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">fb_app_id</span><span class="p">,</span> <span class="no">Figaro</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">fb_app_secret</span><span class="p">,</span>
+</span><span class='line'><span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">email</span><span class="p">,</span> <span class="n">user_location</span><span class="p">,</span> <span class="n">publish_actions</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/models/user.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;add :omniauthable&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">devise</span> <span class="ss">:database_authenticatable</span><span class="p">,</span> <span class="ss">:registerable</span><span class="p">,</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;   :recoverable, :rememberable, :trackable, :validatable,</span>
+</span><span class='line'><span class="sr">   :omniauthable</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Controller changes</h2>
+
+<p><strong>Create authentications and registrations controller</strong></p>
+
+<p>we need callbacks for omniauth that&rsquo;s why we&rsquo;re creating <code>authentications</code>
+controller and <code>registrations</code> controller to override some of devise
+functionalities.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/routes.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">devise_for</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">/&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="ss">controllers</span><span class="p">:</span> <span class="p">{</span><span class="n">omniauth_callbacks</span><span class="p">:</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">authentications</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="ss">registrations</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">registrations</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/controllers/registrations_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">RegistrationsController</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">Devise</span><span class="p">:</span><span class="ss">:RegistrationsController</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  def create&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">super</span>
+</span><span class='line'><span class="n">session</span><span class="o">[</span><span class="s1">&#39;devise.omniauth&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="kp">nil</span> <span class="k">unless</span> <span class="vi">@user</span><span class="o">.</span><span class="n">new_record?</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  def build_resource(*args)&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">super</span>
+</span><span class='line'><span class="k">if</span> <span class="n">session</span><span class="o">[</span><span class="s1">&#39;devise.omniauth&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="vi">@user</span><span class="o">.</span><span class="n">apply_omniauth</span><span class="p">(</span><span class="n">session</span><span class="o">[</span><span class="s1">&#39;devise.omniauth&#39;</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>  <span class="vi">@user</span><span class="o">.</span><span class="n">valid?</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/controllers/authentications_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AuthenticationsController</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span>  <span class="ss">Devise</span><span class="p">:</span><span class="ss">:OmniauthCallbacksController</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  def all&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">omniauth</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">env</span><span class="o">[</span><span class="s2">&quot;omniauth.auth&quot;</span><span class="o">]</span>
+</span><span class='line'><span class="n">authentication</span> <span class="o">=</span> <span class="no">Authentication</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">provider</span><span class="p">:</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;provider&#39;</span><span class="o">]</span><span class="p">,</span> <span class="ss">uid</span><span class="p">:</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;uid&#39;</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">take</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">authentication</span>
+</span><span class='line'>  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Logged in Successfully&quot;</span>
+</span><span class='line'>  <span class="n">sign_in_and_redirect</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">authentication</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
+</span><span class='line'><span class="k">elsif</span> <span class="n">current_user</span>
+</span><span class='line'>  <span class="n">token</span> <span class="o">=</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;credentials&#39;</span><span class="o">].</span><span class="n">token</span>
+</span><span class='line'>  <span class="n">token_secret</span> <span class="o">=</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;credentials&#39;</span><span class="o">].</span><span class="n">has_key?</span><span class="p">(</span><span class="s1">&#39;secret&#39;</span><span class="p">)</span> <span class="p">?</span>  <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;credentials&#39;</span><span class="o">].</span><span class="n">secret</span> <span class="p">:</span> <span class="kp">nil</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">current_user</span><span class="o">.</span><span class="n">authentications</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span><span class="ss">:provider</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;provider&#39;</span><span class="o">]</span><span class="p">,</span> <span class="ss">:uid</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="n">omniauth</span><span class="o">[</span><span class="s1">&#39;uid&#39;</span><span class="o">]</span><span class="p">,</span> <span class="ss">:token</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="n">token</span><span class="p">,</span> <span class="ss">:token_secret</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="n">token_secret</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Authentication successful.&quot;</span>
+</span><span class='line'>  <span class="n">sign_in_and_redirect</span> <span class="n">current_user</span>
+</span><span class='line'><span class="k">else</span>
+</span><span class='line'>  <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  <span class="n">user</span><span class="o">.</span><span class="n">apply_omniauth</span><span class="p">(</span><span class="n">omniauth</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">session</span><span class="o">[</span><span class="s1">&#39;devise.omniauth&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">omniauth</span><span class="o">.</span><span class="n">except</span><span class="p">(</span><span class="s1">&#39;extra&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">redirect_to</span> <span class="n">new_user_registration_path</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  alias_method :facebook, :all&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Views changes</h2>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/layout/application.htm.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%=</span> <span class="n">link_to</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="no">Login</span> <span class="n">with</span> <span class="no">FB</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="n">user_omniauth_authorize_path</span><span class="p">(</span><span class="ss">:facebook</span><span class="p">)</span> <span class="o">%&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>hide passwords field in devise <code>new</code> and <code>edit</code> templates of <code>registrations</code> if they
+are not needed.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/devise/registrations/new.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">password_required?</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">  &amp;lt;%= f.input :password, required: true, label: false, input_html: { class: &amp;lsquo;form-control&amp;rsquo; }, placeholder: &amp;lsquo;Password&amp;rsquo;  %&gt;</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%=</span> <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:password_confirmation</span><span class="p">,</span> <span class="ss">required</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">label</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span> <span class="n">input_html</span><span class="p">:</span> <span class="p">{</span> <span class="ss">class</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">form</span><span class="o">-</span><span class="n">control</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="p">},</span> <span class="ss">placeholder</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="no">Confirm</span> <span class="no">Password</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>  <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">&amp;lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>if you want to add twitter, linkedin, etc, just refer to their respective
+  omniauth gems.</p>
+
+<p>and that&rsquo;s all there is to it. hth.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[how i start my controller spec]]></title>
+    <link href="http://jldbasa.github.io/blog/2013/10/20/how-i-start-my-controller-spec/"/>
+    <updated>2013-10-20T08:04:00-07:00</updated>
+    <id>http://jldbasa.github.io/blog/2013/10/20/how-i-start-my-controller-spec</id>
+    <content type="html"><![CDATA[<p>first, setup the data e.g.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="n">let</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>then define who has access to it e.g.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">admin</span> <span class="n">access</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;describe &amp;ldquo;user access&amp;rdquo; do</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">describe</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">guest</span> <span class="n">access</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>if needed, i use <strong>shared examples</strong> e.g.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">shared_examples</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="kp">public</span> <span class="n">access</span> <span class="n">to</span> <span class="n">products</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span> <span class="k">do</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;shared_examples(&amp;ldquo;full access to products&amp;rdquo;) do</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>and call them like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">it_behaves_like</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="kp">public</span> <span class="n">access</span> <span class="n">to</span> <span class="n">products</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>here&rsquo;s the full source for reference:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">spec_helper</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;describe ProductsController do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="p">}</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  shared_examples(&amp;ldquo;public access to products&amp;rdquo;) do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">describe</span> <span class="s2">&quot;GET #index&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">before</span> <span class="ss">:each</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">get</span> <span class="ss">:index</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;renders the :index template&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  shared_examples(&amp;ldquo;full access to products&amp;rdquo;) do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">describe</span> <span class="s2">&quot;GET &#39;new&#39;&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">before</span> <span class="ss">:each</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">get</span> <span class="ss">:new</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;renders the :new template&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  describe &amp;ldquo;admin access&amp;rdquo; do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">before</span> <span class="ss">:each</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">sign_in</span> <span class="ss">:user</span><span class="p">,</span> <span class="n">admin</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">it_behaves_like</span> <span class="s2">&quot;public access to products&quot;</span>
+</span><span class='line'><span class="n">it_behaves_like</span> <span class="s2">&quot;full access to products&quot;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  describe &amp;ldquo;user access&amp;rdquo; do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">before</span> <span class="ss">:each</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">sign_in</span> <span class="ss">:user</span><span class="p">,</span> <span class="n">user</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">it_behaves_like</span> <span class="s2">&quot;public access to products&quot;</span>
+</span><span class='line'><span class="n">it_behaves_like</span> <span class="s2">&quot;full access to products&quot;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  describe &amp;ldquo;guest access&amp;rdquo; do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">it_behaves_like</span> <span class="s2">&quot;public access to products&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="s2">&quot;GET &#39;new&#39;&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;requires login&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[creating rails app from scratch]]></title>
+    <link href="http://jldbasa.github.io/blog/2013/10/10/creating-rails-app-from-scratch/"/>
+    <updated>2013-10-10T10:47:00-07:00</updated>
+    <id>http://jldbasa.github.io/blog/2013/10/10/creating-rails-app-from-scratch</id>
+    <content type="html"><![CDATA[<p>this is a trick i always use when i create a new project and i don&rsquo;t have rails gem
+installed globally. but before i put the commands, here&rsquo;s my current setup:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>gem list&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;&lt;strong&gt;&lt;em&gt; LOCAL GEMS &lt;/em&gt;&lt;/strong&gt;
+</span><span class='line'>bundler <span class="o">(</span>1.3.5<span class="o">)</span>
+</span><span class='line'>rbenv-gem-rehash <span class="o">(</span>1.0.0<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>also, i install the gems in a vendor directory inside the project; which means you
+need to specify the <code>--path vendor</code> when running bundle install.</p>
+
+<p>here are the commands:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mkdir appname
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>appname
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> &amp;ldquo;source &amp;lsquo;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;https://rubygems.org&quot;</span>&gt;https://rubygems.org&lt;/a&gt;&amp;rsquo;&amp;rdquo; &gt; Gemfile
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> &amp;ldquo;gem &amp;lsquo;rails&amp;rsquo;, &amp;lsquo;~&gt; 4.0.0&amp;rsquo;&amp;rdquo; &gt;&gt; Gemfile&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;make sure that your ruby version is <span class="nb">set </span>before running the next commands. am&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;using version 2.0.0.&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="nv">$ </span>bundle install &amp;mdash;path vendor
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new . &amp;mdash;skip-bundle -d mysql
+</span><span class='line'><span class="nv">$ </span>bundle install &amp;mdash;path vendor
+</span><span class='line'><span class="nv">$ </span>rails -v
+</span><span class='line'><span class="nv">$ </span>bundle package
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> &amp;lsquo;vendor/ruby&amp;rsquo; &gt;&gt; .gitignore
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   
