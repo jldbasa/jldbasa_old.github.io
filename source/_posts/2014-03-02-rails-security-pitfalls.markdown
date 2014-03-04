@@ -15,6 +15,8 @@ lead to a catastrophe.
 
 ## SQL Injection
 
+![Exploits of a Mom](http://imgs.xkcd.com/comics/exploits_of_a_mom.png)
+
 ### simple case
 
 building your own conditions is vulnerable to sql injection. the code below is
@@ -189,6 +191,8 @@ MyApp::Application.config.secret_token = ENV['SECRET_TOKEN']
 
 {% endcodeblock %}
 
+**note:** in Rails 4, it is called `secret_key_base`.
+
 
 ## Logging Parameters
 
@@ -206,7 +210,7 @@ Rails.application.config.filter_parameters += [:password, :ssn, :token]
 
 
 ### problem
-in Rails 3, there's an example in `config/routes.rb`
+in Rails 3, there's even an example in `config/routes.rb`
 
 {% codeblock lang:ruby config/routes.rb %}
 
@@ -224,6 +228,43 @@ match '/posts/delete/:id', :to => "posts#destroy" :as => "delete_post"
 - use the correct HTTP verb e.g: `:get, :post, :delete`
 - use `:via` e.g. `match '/posts/delete/:id', :to => "posts#destroy" :as =>
   "delete_post", :via => :delete`
+
+
+# Good practices
+
+## scopes
+- let say  we have `user` and `post` models, when you you retrieve `post` for
+  `edit`, `update` or `destroy`, make sure you get it through authorize user.
+  in the code below; `Example 2` is the preferred way
+
+{% codeblock lang:ruby app/controllers/posts_controller.rb %}
+...
+# Example 1 (UNSAFE)
+def edit
+  @post = Post.find_by id: params[:id]
+end
+
+# Example 2 (SAFE)
+def edit
+  @post = current_user.posts.find_by id: params[:id]
+end
+...
+
+{% endcodeblock %}
+- use authorization gem such as `cancan`
+
+
+## admin
+
+most of the time, admin URLs can be found in: `http://example.com/admin`, if you
+can, please consider the following:
+
+- maybe use sub-domain e.g. `http://some-url.example.com`
+- whitelist IP address
+- VPN or intranet access only
+- separate application
+  
+
 
 
 # Conclusion
