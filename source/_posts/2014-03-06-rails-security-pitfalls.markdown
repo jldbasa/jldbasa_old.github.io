@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "rails security pitfalls"
-date: 2014-03-02 06:00:10 -0800
+date: 2014-03-06 06:00:10 -0800
 comments: true
 categories: Rails
 ---
