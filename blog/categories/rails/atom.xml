@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | $ man jerome_]]></title>
   <link href="http://jldbasa.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2014-03-06T12:06:10-08:00</updated>
+  <updated>2014-03-06T12:11:55-08:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[rails security pitfalls]]></title>
-    <link href="http://jldbasa.github.io/blog/2014/03/02/rails-security-pitfalls/"/>
-    <updated>2014-03-02T06:00:10-08:00</updated>
-    <id>http://jldbasa.github.io/blog/2014/03/02/rails-security-pitfalls</id>
+    <link href="http://jldbasa.github.io/blog/2014/03/06/rails-security-pitfalls/"/>
+    <updated>2014-03-06T06:00:10-08:00</updated>
+    <id>http://jldbasa.github.io/blog/2014/03/06/rails-security-pitfalls</id>
     <content type="html"><![CDATA[<p>in this post i will cover the security related stuff for rails which i learned
 over the last couple of years.</p>
 
