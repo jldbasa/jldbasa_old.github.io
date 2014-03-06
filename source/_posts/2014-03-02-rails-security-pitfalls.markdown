@@ -3,13 +3,16 @@ layout: post
 title: "rails security pitfalls"
 date: 2014-03-02 06:00:10 -0800
 comments: true
-categories: 
+categories: Rails
 ---
-on this post i will cover all the security related stuff for rails which i learned
+in this post i will cover the security related stuff for rails which i learned
 over the last couple of years.
 
-rails is secure by default (for hackers? maybe not), but a simple mistake will
-lead to a catastrophe.
+security is **hard**. rails is pretty secure by default (from hackers? maybe not),
+but a simple mistake will lead to a catastrophe. as much as possible, try to
+avoid the common pitfalls. as the saying goes **prevention is better than cure**
+
+
 
 # Common Attacks
 
@@ -26,15 +29,15 @@ not safe.
 User.where("username LIKE '%#{params[:username]}%'")
 
 # query
-SELECT 
-  `users`.* 
-FROM 
-  `users` 
+SELECT
+  `users`.*
+FROM
+  `users`
 WHERE (username LIKE '%jerome%')
 
 {% endcodeblock %}
 
-let say the user change the value of `params[:username]` e.g.
+let say the attacker sets the value of `params[:username]` e.g.
 
 
 {% codeblock lang:ruby %}
@@ -43,10 +46,10 @@ params[:username] = "') UNION SELECT username, password,1,1,1 FROM users --"
 User.where("username LIKE '%#{params[:username]}%'")
 
 # query
-SELECT 
-  `users`.* 
-FROM 
-  `users` 
+SELECT
+  `users`.*
+FROM
+  `users`
 WHERE (username LIKE '%') UNION SELECT username, password,1,1,1 FROM users --%')
 {% endcodeblock %}
 
@@ -76,7 +79,7 @@ let say we have this code:
 </span>
 {% endcodeblock %}
 
-and the user set the value of `user.biography` to `<script>alert('hello');</script>`
+and the attacker sets the value of `user.biography` to `<script>alert('hello');</script>`
 the rendered page will have this.
 
 {% codeblock lang:ruby %}
@@ -85,14 +88,15 @@ the rendered page will have this.
 </span>
 {% endcodeblock %}
 
+our page will now execute this javascript code!
+
 ### countermeasure
 
-user input must be sanitized, you can use various methods from Rails such as
-`sanitize`
+user input must be sanitized, you can use various Rails methods such as `sanitize`
 
 {% codeblock lang:ruby %}
 <span>
-  <%= sanitize (user.biography, tags: %w(a), attributes:%w(href)) %>
+  <%= sanitize (user.biography, tags: %w(a), attributes: %w(href)) %>
 </span>
 {% endcodeblock %}
 
@@ -123,6 +127,9 @@ def create
 end
 {% endcodeblock %}
 
+if you have `User.admin` attribute; and the attacker sends
+  `params[:user][:admin] = 1`, then the `admin` attribute will be set.
+
 ### solution
 
 - blacklist attributes using `attr_protected`
@@ -143,7 +150,7 @@ class User < ActiveRecord::Base
 end
 {% endcodeblock %}
 
-- strong parameters
+- use strong parameters
 
 {% codeblock lang:ruby %}
 ...
@@ -171,7 +178,8 @@ a token by running `$ rake secret`
 
 ### problem
 
-by default the token is stored in the file
+by default the token is stored in the file. most of the time this file is in
+version control
 
 {% codeblock lang:ruby config/initializers/secret_token.rb %}
 
@@ -206,7 +214,7 @@ Rails.application.config.filter_parameters += [:password, :ssn, :token]
 {% endcodeblock %}
 
 
-## "match" in routing
+## "match" in Routing
 
 
 ### problem
@@ -220,7 +228,8 @@ match ':controller(/:action(/:id))(.:format)'
 match '/posts/delete/:id', :to => "posts#destroy" :as => "delete_post"
 {% endcodeblock %}
 
-- `match` matches all HTTP verb.
+- `match` matches all HTTP verb and Rails CSRF protection doesn't apply to
+  `GET` requests.
 - the second route will allow `GET` method to delete posts
 
 ### solution
@@ -230,9 +239,7 @@ match '/posts/delete/:id', :to => "posts#destroy" :as => "delete_post"
   "delete_post", :via => :delete`
 
 
-# Good practices
-
-## scopes
+## Scopes
 - let say  we have `user` and `post` models, when you you retrieve `post` for
   `edit`, `update` or `destroy`, make sure you get it through authorize user.
   in the code below; `Example 2` is the preferred way
@@ -254,7 +261,7 @@ end
 - use authorization gem such as `cancan`
 
 
-## admin
+## Admin
 
 most of the time, admin URLs can be found in: `http://example.com/admin`, if you
 can, please consider the following:
@@ -263,13 +270,12 @@ can, please consider the following:
 - whitelist IP address
 - VPN or intranet access only
 - separate application
-  
 
 
 
 # Conclusion
 
-use `brakeman` to scan your app for vulnerabilities
+use `brakeman` to scan your app for vulnerabilities.
 
 {% codeblock lang:sh %}
 
