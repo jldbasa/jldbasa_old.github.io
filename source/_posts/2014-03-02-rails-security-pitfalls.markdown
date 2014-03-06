@@ -283,3 +283,31 @@ $ brakeman . -o report.html
 
 {% endcodeblock %}
 
+{% codeblock %}
++----------------------+-------+
+| Warning Type         | Total |
++----------------------+-------+
+| Cross Site Scripting | 1     |
+| SQL Injection        | 1     |
+| Session Setting      | 1     |
++----------------------+-------+
+
+
++SECURITY WARNINGS+
+
++------------+-----------------+----------+-----------------+-------------------------------------------------------------------------+
+| Confidence | Class           | Method   | Warning Type    | Message                                                                 |
++------------+-----------------+----------+-----------------+-------------------------------------------------------------------------+
+| High       | PostsController | set_post | SQL Injection   | Possible SQL injection near line 68: Post.where("id =#{+params[:id]+}") |
+| High       |                 |          | Session Setting | Session secret should not be included in version control near line 12   |
++------------+-----------------+----------+-----------------+-------------------------------------------------------------------------+
+
+View Warnings:
+
++------------+-------------------------------------+----------------------+-----------------------------------------------------------------------+
+| Confidence | Template                            | Warning Type | Message                                                                       |
++------------+-------------------------------------+----------------------+-----------------------------------------------------------------------+
+| High       | posts/show (PostsController#create) | Cross Site Scripting | Unescaped model attribute near line 10: Post.new(post_params).content |
++------------+-------------------------------------+----------------------+-----------------------------------------------------------------------+
+{% endcodeblock %}
+
