@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | $ man jerome_]]></title>
   <link href="http://jldbasa.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://jldbasa.github.io/"/>
-  <updated>2014-03-06T12:11:55-08:00</updated>
+  <updated>2014-04-23T21:47:55-07:00</updated>
   <id>http://jldbasa.github.io/</id>
   <author>
     <name><![CDATA[jerome basa]]></name>
@@ -708,7 +708,7 @@ migration  tasks e.g:</p>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/carts/index.html.erb </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">link_to</span><span class="p">(</span><span class="n">image_tag</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif&quot;</span><span class="o">&gt;</span><span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">www</span><span class="o">.</span><span class="n">paypal</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">en_US</span><span class="o">/</span><span class="n">i</span><span class="o">/</span><span class="n">btn</span><span class="o">/</span><span class="n">btn_xpressCheckout</span><span class="o">.</span><span class="n">gif</span><span class="o">&lt;</span><span class="sr">/a&gt;&amp;rdquo;), express_orders_path)</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">link_to</span><span class="p">(</span><span class="n">image_tag</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif&quot;</span><span class="o">&gt;</span><span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">www</span><span class="o">.</span><span class="n">paypal</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">en_US</span><span class="o">/</span><span class="n">i</span><span class="o">/</span><span class="n">btn</span><span class="o">/</span><span class="n">btn_xpressCheckout</span><span class="o">.</span><span class="n">gif</span><span class="o">&lt;</span><span class="sr">/a&gt;&amp;rdquo;), express_checkout_path)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p><strong>IMPORTANT:</strong> Paypal wants you to use their buttons, so use them! LOL</p>
