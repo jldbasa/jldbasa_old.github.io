@@ -66,7 +66,7 @@ orders
 after you add the `express_checkout` to your routes file; in your cart page, put the express paypal checkout button
 
 {% codeblock lang:ruby app/views/carts/index.html.erb %}
-link_to(image_tag("https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"), express_orders_path)
+link_to(image_tag("https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"), express_checkout_path)
 {% endcodeblock %}
 
 **IMPORTANT:** Paypal wants you to use their buttons, so use them! LOL
